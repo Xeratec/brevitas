@@ -6,9 +6,11 @@ from torch import Tensor
 # early import of max_pool to avoid being affected by monkeypatching
 from torch.nn.functional import max_pool1d
 from torch.nn.functional import max_pool2d
+from torch.nn.functional import avg_pool2d
 
 from brevitas.nn import QuantMaxPool1d
 from brevitas.nn import QuantMaxPool2d
+from brevitas.nn import TruncAvgPool2d
 
 from .base import StdQOpONNXQuantWrapperHandler
 
@@ -40,3 +42,20 @@ class StdQOpONNXQuantMaxPool2d(StdQOpONNXQuantMaxPoolNd):
     def op_symbolic_execution(self, inp: Tensor):
         op_symbolic_kwargs = self.symbolic_kwargs['op_symbolic_kwargs']
         return max_pool2d(inp, *op_symbolic_kwargs.values())
+
+
+class StdQOpONNXQuantAvgPoolNd(StdQOpONNXQuantWrapperHandler, ABC):
+
+    @classmethod
+    def op_symbolic_kwargs(cls, module: Union[TruncAvgPool2d]):
+        return {
+            'output_size': module.kernel_size,
+            'stride': module.stride,
+            'padding': module.padding}
+
+class StdQOpONNXQuantAvgPool2d(StdQOpONNXQuantAvgPoolNd):
+    handled_layer = TruncAvgPool2d
+
+    def op_symbolic_execution(self, inp: Tensor):
+        op_symbolic_kwargs = self.symbolic_kwargs['op_symbolic_kwargs']
+        return avg_pool2d(inp, *op_symbolic_kwargs.values())

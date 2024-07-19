@@ -33,6 +33,14 @@ class TruncMixin(QuantProxyMixin):
     def is_trunc_quant_enabled(self):
         return self.trunc_quant.is_quant_enabled
 
+    @property
+    def is_output_quant_enabled(self):
+        return self.trunc_quant.is_quant_enabled
+
+    @property
+    def is_quant_output_narrow_range(self):  # TODO make abstract once narrow range can be cached
+        return self.trunc_quant.is_narrow_range
+
 
 class QuantClampMixin(QuantProxyMixin):
     __metaclass__ = ABCMeta

@@ -29,6 +29,7 @@ from .handler.parameter import StdQOpONNXQuantConv2dHandler
 from .handler.parameter import StdQOpONNXQuantLinearHandler
 from .handler.pool import StdQOpONNXQuantMaxPool1d
 from .handler.pool import StdQOpONNXQuantMaxPool2d
+from .handler.pool import StdQOpONNXQuantAvgPool2d
 
 
 class StdQOpONNXManager(StdONNXBaseManager):
@@ -55,7 +56,8 @@ class StdQOpONNXManager(StdONNXBaseManager):
         StdQOpONNXQuantTanhHandler,
         StdQOpONNXQuantSigmoidHandler,
         StdQOpONNXQuantMaxPool1d,
-        StdQOpONNXQuantMaxPool2d]
+        StdQOpONNXQuantMaxPool2d,
+        StdQOpONNXQuantAvgPool2d]
 
     onnx_passes = [
         # remove unused graph inputs & initializers
