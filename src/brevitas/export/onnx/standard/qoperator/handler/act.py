@@ -48,7 +48,7 @@ class StdQOpONNXQuantNLALHandler(StdQOpONNXQuantLayerHandler, ABC):
             input_redequant_symbolic_kwargs = {
                 'input_scale': input_quant_symbolic_kwargs['output_scale'],
                 'input_zero_point': input_quant_symbolic_kwargs['output_zero_point'],
-                'input_axis': input_quant_symbolic_kwargs['input_axis']}
+                'input_axis': input_quant_symbolic_kwargs['output_axis']}
         else:
             input_redequant_symbolic_kwargs = None
 

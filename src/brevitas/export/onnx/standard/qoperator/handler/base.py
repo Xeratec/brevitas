@@ -136,7 +136,7 @@ class StdQOpONNXQuantLayerHandler(ONNXBaseHandler,
                 cls.quant_axis(cached_io.scale)}
         # TODO support narrow caching
         # Assume narrow is False since we are preventing it everywhere else
-        int_clip_kwargs = cls.clip_symbolic_kwargs(False, cached_io.signed, cached_io.bit_width)
+        int_clip_kwargs = cls.int_clip_symbolic_kwargs(False, cached_io.signed, cached_io.bit_width)
         return q_kwargs, int_clip_kwargs
 
     def symbolic_execution(self, inp: Tensor):
