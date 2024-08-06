@@ -6,6 +6,7 @@ from typing import Union
 
 from brevitas.nn import QuantMaxPool1d
 from brevitas.nn import QuantMaxPool2d
+from brevitas.nn import TruncAvgPool2d
 
 from . import qF
 from .base import PytorchQuantLayerHandler
@@ -58,3 +59,40 @@ class PytorchQuantMaxPool2d(PytorchQuantMaxPoolNd):
     @classmethod
     def prepare_qf(cls, module: QuantMaxPool1d):
         return qF.max_pool2d, cls.prepare_qf_kwargs(module)
+
+class PytorchQuantAvgPoolNd(PytorchQuantLayerHandler, ABC):
+
+    @classmethod
+    def validate(cls, module):
+        # nothing to do here, pytorch's quant max pool is standard max pool
+        pass
+
+    @classmethod
+    def explicit_output_dtype(cls) -> bool:
+        return False
+
+    @classmethod
+    def prepare_qf_kwargs(cls, module: Union[QuantMaxPool1d, QuantMaxPool2d]):
+        return {
+            'output_size': module.kernel_size,
+            'stride': module.stride,
+            'padding': module.padding
+        }
+
+    def prepare_for_export(self, module):
+        self.qf_impl, self.qf_kwargs = self.prepare_qf(module)
+        self.return_quant_tensor = module.return_quant_tensor
+
+    def forward(self, inp):
+        out = self.qf_impl(inp, **self.qf_kwargs)
+        # We are being tolerant here to non quantized tensors
+        if out.is_quantized and not self.return_quant_tensor:
+            out = out.dequantize()
+        return out
+
+class PytorchQuantQuantAvg2d(PytorchQuantAvgPoolNd):
+    handled_layer = TruncAvgPool2d
+
+    @classmethod
+    def prepare_qf(cls, module: TruncAvgPool2d):
+        return qF.avg_pool2d, cls.prepare_qf_kwargs(module)

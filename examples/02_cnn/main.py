@@ -170,12 +170,12 @@ model_quant.eval()
 model_quant.to(device)
 
 # %% Export QCDQ model
-# export_onnx_qcdq(model_quant, args=ref_input, export_path="02_quant_model_qcdq.onnx")
-# export_torch_qcdq(model_quant, args=ref_input, export_path="02_quant_model_qcdq.pt")
+export_onnx_qcdq(model_quant, args=ref_input, export_path="02_quant_model_qcdq.onnx")
+export_torch_qcdq(model_quant, args=ref_input, export_path="02_quant_model_qcdq.pt")
 
 # %% Export QOP model
 export_onnx_qop(model_quant, args=ref_input, export_path="02_quant_model_qop.onnx")
 # export_torch_qop(model_quant, input_t=ref_input, export_path="02_quant_model_qop.pt")
 
 # %% Export QONNX model
-# export_qonnx(model_quant, args=ref_input, export_path="02_quant_model_qonnx.onnx")
+export_qonnx(model_quant, args=ref_input, export_path="02_quant_model_qonnx.onnx")

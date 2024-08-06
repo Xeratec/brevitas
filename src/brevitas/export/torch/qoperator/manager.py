@@ -22,6 +22,7 @@ from .handler.parameter import PytorchQuantConv2dHandler
 from .handler.parameter import PytorchQuantLinearHandler
 from .handler.pool import PytorchQuantMaxPool1d
 from .handler.pool import PytorchQuantMaxPool2d
+from .handler.pool import PytorchQuantQuantAvg2d
 
 
 class TorchQOpManager(BaseManager):
@@ -35,7 +36,8 @@ class TorchQOpManager(BaseManager):
         PytorchQuantReLUHandler,
         PytorchQuantConv1dHandler,
         PytorchQuantConv2dHandler,
-        PytorchQuantLinearHandler]
+        PytorchQuantLinearHandler,
+        PytorchQuantQuantAvg2d]
 
     @classmethod
     def set_export_mode(cls, module: Module, enabled: bool):
